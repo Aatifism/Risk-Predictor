@@ -1,0 +1,14 @@
+Flask
+flask-cors
+Flask-SQLAlchemy
+SQLAlchemy
+shap
+pandas
+numpy
+scikit-learn
+xgboost
+joblib
+gunicorn
+python-dotenv
+mysqlclient
+mysql-connector-python

@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comprehensive Patient Data Input</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            width: 80%;
+            max-width: 800px;
+            margin: auto;
+            overflow: hidden;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        form {
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        fieldset {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+
+        legend {
+            font-weight: bold;
+            padding: 0 10px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="number"],
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background: #333;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #555;
+        }
+
+        #results {
+            margin-top: 20px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .report-button {
+            background-color: #2c7be5;
+            margin-top: 15px;
+            padding: 12px;
+            font-weight: bold;
+        }
+
+        .report-button:hover {
+            background-color: #1a68d1;
+        }
+
+        .risk-item {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-left: 4px solid #ddd;
+            background-color: #f9f9f9;
+        }
+
+        .high-risk {
+            border-left-color: #e74c3c;
+        }
+
+        .medium-risk {
+            border-left-color: #f39c12;
+        }
+
+        .low-risk {
+            border-left-color: #2ecc71;
+        }
+
+        @media (min-width: 768px) {
+            .form-group {
+                display: inline-block;
+                width: calc(50% - 10px);
+                margin-right: 10px;
+            }
+            
+            .form-group:nth-child(even) {
+                margin-right: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Comprehensive Patient Data Input</h1>
+        
+        <form id="patientForm">
+            <!-- Basic Information -->
+            <fieldset>
+                <legend>Basic Information</legend>
+                <div class="form-group">
+                    <label for="age">Age:</label>
+                    <input type="number" id="age" name="Age" required value="45">
+                </div>
+                <div class="form-group">
+                    <label for="gender">Gender:</label>
+                    <select id="gender" name="Gender" required>
+                        <option value="Male">Male</option>
+                        <option value="Female" selected>Female</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="height">Height (cm):</label>
+                    <input type="number" id="height" name="Height" step="0.1" required value="165.5">
+                </div>
+                <div class="form-group">
+                    <label for="weight">Weight (kg):</label>
+                    <input type="number" id="weight" name="Weight" step="0.1" required value="68.2">
+                </div>
+                <div class="form-group">
+                    <label for="bmi">BMI:</label>
+                    <input type="number" id="bmi" name="BMI" step="0.01" required value="24.9">
+                </div>
+            </fieldset>
+
+            <!-- Blood Pressure -->
+            <fieldset>
+                <legend>Blood Pressure</legend>
+                <div class="form-group">
+                    <label for="systolic_bp">Systolic BP (mmHg):</label>
+                    <input type="number" id="systolic_bp" name="Systolic_BP" required value="120">
+                </div>
+                <div class="form-group">
+                    <label for="diastolic_bp">Diastolic BP (mmHg):</label>
+                    <input type="number" id="diastolic_bp" name="Diastolic_BP" required value="80">
+                </div>
+            </fieldset>
+
+            <!-- Cholesterol -->
+            <fieldset>
+                <legend>Cholesterol</legend>
+                <div class="form-group">
+                    <label for="cholesterol_total">Total Cholesterol (mg/dL):</label>
+                    <input type="number" id="cholesterol_total" name="Cholesterol_Total" required value="190">
+                </div>
+                <div class="form-group">
+                    <label for="cholesterol_hdl">HDL Cholesterol (mg/dL):</label>
+                    <input type="number" id="cholesterol_hdl" name="Cholesterol_HDL" required value="55">
+                </div>
+                <div class="form-group">
+                    <label for="cholesterol_ldl">LDL Cholesterol (mg/dL):</label>
+                    <input type="number" id="cholesterol_ldl" name="Cholesterol_LDL" required value="110">
+                </div>
+                <div class="form-group">
+                    <label for="triglycerides">Triglycerides (mg/dL):</label>
+                    <input type="number" id="triglycerides" name="Triglycerides" required value="120">
+                </div>
+            </fieldset>
+
+            <!-- Diabetes Indicators -->
+            <fieldset>
+                <legend>Diabetes Indicators</legend>
+                <div class="form-group">
+                    <label for="blood_glucose_fasting">Fasting Blood Glucose (mg/dL):</label>
+                    <input type="number" id="blood_glucose_fasting" name="Blood_Glucose_Fasting" required value="95">
+                </div>
+                <div class="form-group">
+                    <label for="hba1c">HbA1c (%):</label>
+                    <input type="number" id="hba1c" name="HbA1c" step="0.1" required value="5.4">
+                </div>
+            </fieldset>
+
+            <!-- Lifestyle Factors -->
+            <fieldset>
+                <legend>Lifestyle Factors</legend>
+                <div class="form-group">
+                    <label for="smoking_status">Smoking Status:</label>
+                    <select id="smoking_status" name="Smoking_Status" required>
+                        <option value="Never" selected>Never</option>
+                        <option value="Former">Former</option>
+                        <option value="Current">Current</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="alcohol_consumption">Alcohol Consumption:</label>
+                    <select id="alcohol_consumption" name="Alcohol_Consumption" required>
+                        <option value="None">None</option>
+                        <option value="Light" selected>Light</option>
+                        <option value="Moderate">Moderate</option>
+                        <option value="Heavy">Heavy</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="physical_activity">Physical Activity:</label>
+                    <select id="physical_activity" name="Physical_Activity" required>
+                        <option value="None">None</option>
+                        <option value="Light">Light</option>
+                        <option value="Moderate" selected>Moderate</option>
+                        <option value="High">High</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="stress_level">Stress Level:</label>
+                    <select id="stress_level" name="Stress_Level" required>
+                        <option value="Low" selected>Low</option>
+                        <option value="Medium">Medium</option>
+                        <option value="High">High</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="sleep_hours">Sleep Hours:</label>
+                    <input type="number" id="sleep_hours" name="Sleep_Hours" step="0.5" required value="7.5">
+                </div>
+                <div class="form-group">
+                    <label for="fruits_veggies_daily">Daily Fruits & Vegetables Intake:</label>
+                    <input type="number" id="fruits_veggies_daily" name="Fruits_Veggies_Daily" step="0.5" required value="5">
+                </div>
+            </fieldset>
+
+            <!-- Family History -->
+            <fieldset>
+                <legend>Family History</legend>
+                <div class="form-group">
+                    <label for="family_history_cvd">Family History of CVD:</label>
+                    <input type="number" id="family_history_cvd" name="Family_History_CVD" min="0" max="1" required value="0">
+                </div>
+                <div class="form-group">
+                    <label for="family_history_diabetes">Family History of Diabetes:</label>
+                    <input type="number" id="family_history_diabetes" name="Family_History_Diabetes" min="0" max="1" required value="0">
+                </div>
+                <div class="form-group">
+                    <label for="family_history_cancer">Family History of Cancer:</label>
+                    <input type="number" id="family_history_cancer" name="Family_History_Cancer" min="0" max="1" required value="0">
+                </div>
+            </fieldset>
+
+            <!-- Additional Blood Tests -->
+            <fieldset>
+                <legend>Additional Blood Tests</legend>
+                <div class="form-group">
+                    <label for="creatinine">Creatinine (mg/dL):</label>
+                    <input type="number" id="creatinine" name="Creatinine" step="0.1" required value="0.9">
+                </div>
+                <div class="form-group">
+                    <label for="egfr">eGFR (mL/min/1.73m²):</label>
+                    <input type="number" id="egfr" name="eGFR" required value="90">
+                </div>
+                <div class="form-group">
+                    <label for="alt">ALT (U/L):</label>
+                    <input type="number" id="alt" name="ALT" required value="25">
+                </div>
+                <div class="form-group">
+                    <label for="ast">AST (U/L):</label>
+                    <input type="number" id="ast" name="AST" required value="22">
+                </div>
+                <div class="form-group">
+                    <label for="tsh">TSH (mIU/L):</label>
+                    <input type="number" id="tsh" name="TSH" step="0.1" required value="2.5">
+                </div>
+                <div class="form-group">
+                    <label for="t4">T4 (ng/dL):</label>
+                    <input type="number" id="t4" name="T4" step="0.1" required value="1.2">
+                </div>
+                <div class="form-group">
+                    <label for="vitamin_d">Vitamin D (ng/mL):</label>
+                    <input type="number" id="vitamin_d" name="Vitamin_D" required value="30">
+                </div>
+                <div class="form-group">
+                    <label for="calcium">Calcium (mg/dL):</label>
+                    <input type="number" id="calcium" name="Calcium" step="0.1" required value="9.5">
+                </div>
+                <div class="form-group">
+                    <label for="hemoglobin">Hemoglobin (g/dL):</label>
+                    <input type="number" id="hemoglobin" name="Hemoglobin" step="0.1" required value="13.5">
+                </div>
+                <div class="form-group">
+                    <label for="white_blood_cell_count">White Blood Cell Count (10³ cells/uL):</label>
+                    <input type="number" id="white_blood_cell_count" name="White_Blood_Cell_Count" step="0.1" required value="6.5">
+                </div>
+                <div class="form-group">
+                    <label for="platelet_count">Platelet Count (10³ cells/uL):</label>
+                    <input type="number" id="platelet_count" name="Platelet_Count" required value="250">
+                </div>
+                <div class="form-group">
+                    <label for="c_reactive_protein">C-Reactive Protein (mg/L):</label>
+                    <input type="number" id="c_reactive_protein" name="C_Reactive_Protein" step="0.1" required value="1.0">
+                </div>
+                <div class="form-group">
+                    <label for="vitamin_b12">Vitamin B12 (pg/mL):</label>
+                    <input type="number" id="vitamin_b12" name="Vitamin_B12" required value="400">
+                </div>
+                <div class="form-group">
+                    <label for="folate">Folate (ng/mL):</label>
+                    <input type="number" id="folate" name="Folate" step="0.1" required value="8.5">
+                </div>
+                <div class="form-group">
+                    <label for="ferritin">Ferritin (ng/mL):</label>
+                    <input type="number" id="ferritin" name="Ferritin" required value="75">
+                </div>
+                <div class="form-group">
+                    <label for="uric_acid">Uric Acid (mg/dL):</label>
+                    <input type="number" id="uric_acid" name="Uric_Acid" step="0.1" required value="5.0">
+                </div>
+                <div class="form-group">
+                    <label for="psa">PSA (ng/mL):</label>
+                    <input type="number" id="psa" name="PSA" step="0.1" required value="1.0">
+                </div>
+                <div class="form-group">
+                    <label for="bone_density_t_score">Bone Density T-Score:</label>
+                    <input type="number" id="bone_density_t_score" name="Bone_Density_T_Score" step="0.1" required value="-0.5">
+                </div>
+            </fieldset>
+
+            <button type="submit">Predict Risk</button>
+        </form>
+
+        <div id="results"></div>
+
+        <div id="reportLink" style="display: none; margin-top: 1rem; text-align: center;">
+            <a href="/report" class="report-button" style="display: inline-block; padding: 12px 24px; background-color: #2c7be5; color: white; text-decoration: none; border-radius: 4px; font-weight: bold;">Get Detailed Health Report</a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('patientForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Show loading state
+            document.getElementById('results').innerHTML = '<p>Calculating risks... Please wait.</p>';
+            
+            // Gather form data
+            const formData = new FormData(this);
+            const data = {};
+            formData.forEach((value, key) => {
+                // Convert numeric values to numbers
+                data[key] = isNaN(value) ? value : Number(value);
+            });
+            
+            // Send prediction request
+            fetch('/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(predictions => {
+                // Display results
+                let resultsHTML = '<h2>Risk Assessment Results</h2>';
+                
+                for (const [disease, prediction] of Object.entries(predictions)) {
+                    // Format disease name
+                    const formattedDisease = disease.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                    
+                    // Determine risk class
+                    let riskClass = 'low-risk';
+                    if (prediction.risk_level.toLowerCase().includes('high')) {
+                        riskClass = 'high-risk';
+                    } else if (prediction.risk_level.toLowerCase().includes('medium') || 
+                               prediction.risk_level.toLowerCase().includes('moderate')) {
+                        riskClass = 'medium-risk';
+                    }
+                    
+                    resultsHTML += `
+                        <div class="risk-item ${riskClass}">
+                            <strong>${formattedDisease}:</strong> ${prediction.risk_level} risk 
+                            (${(prediction.probability * 100).toFixed(1)}% probability)
+                        </div>
+                    `;
+                }
+                
+                document.getElementById('results').innerHTML = resultsHTML;
+                
+                // Show the report button
+                document.getElementById('reportLink').style.display = 'block';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('results').innerHTML = `<p>Error: ${error.message}. Please try again.</p>`;
+            });
+        });
+    </script>
+</body>
+</html>

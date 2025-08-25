@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Risk Report</title>
+    <style>
+        /* Base styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4efe9 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            position: relative;
+        }
+        
+        /* Header styles */
+        h1 {
+            text-align: center;
+            padding: 25px 20px;
+            background: linear-gradient(120deg, #2c7be5 0%, #1a68d1 100%);
+            color: white;
+            margin-bottom: 0;
+            font-size: 28px;
+        }
+        
+        h2 {
+            color: #2c7be5;
+            padding-bottom: 10px;
+            margin: 25px 0 15px;
+            border-bottom: 2px solid #eaeaea;
+            font-size: 22px;
+        }
+        
+        /* Section styles */
+        .patient-info, .report-section {
+            padding: 20px 30px;
+            border-bottom: 1px solid #eaeaea;
+        }
+        
+        .patient-info {
+            background-color: #f8f9fa;
+        }
+        
+        .patient-details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .detail-item {
+            background: white;
+            padding: 12px 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        .detail-item strong {
+            color: #2c7be5;
+        }
+        
+        /* Risk indicators */
+        .risk-item {
+            padding: 12px 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 5px solid #6c757d;
+            background-color: #f8f9fa;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .risk-high {
+            border-left-color: #dc3545;
+            background-color: #ffeef0;
+        }
+        
+        .risk-medium {
+            border-left-color: #ffc107;
+            background-color: #fffbf0;
+        }
+        
+        .risk-low {
+            border-left-color: #28a745;
+            background-color: #f0fff4;
+        }
+        
+        .risk-percentage {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        
+        /* Recommendation items */
+        .recommendation {
+            padding: 15px;
+            margin: 15px 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            border-left: 4px solid #2c7be5;
+        }
+        
+        .recommendation h3 {
+            color: #2c7be5;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .recommendation h3::before {
+            content: "💡";
+            margin-right: 10px;
+        }
+        
+        /* Button styles */
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            padding: 25px;
+        }
+        
+        .print-btn, .secondary-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .print-btn {
+            background: linear-gradient(120deg, #2c7be5 0%, #1a68d1 100%);
+            color: white;
+            box-shadow: 0 4px 6px rgba(44, 123, 229, 0.3);
+        }
+        
+        .print-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(44, 123, 229, 0.4);
+        }
+        
+        .print-btn::before {
+            content: "🖨️";
+            margin-right: 8px;
+        }
+        
+        .secondary-btn {
+            background: white;
+            color: #6c757d;
+            border: 1px solid #dee2e6;
+        }
+        
+        .secondary-btn:hover {
+            background: #f8f9fa;
+            transform: translateY(-2px);
+        }
+        
+        .secondary-btn::before {
+            content: "←";
+            margin-right: 8px;
+        }
+        
+        /* Loading screen */
+        #loadingScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #2c7be5 0%, #1a68d1 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            color: white;
+            transition: opacity 0.5s ease;
+        }
+        
+        .loading-content {
+            text-align: center;
+            max-width: 600px;
+            padding: 30px;
+        }
+        
+        .spinner {
+            width: 70px;
+            height: 70px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin: 0 auto 25px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .loading-content h2 {
+            color: white;
+            font-size: 28px;
+            margin-bottom: 20px;
+            border-bottom: none;
+        }
+        
+        .loading-emoji {
+            font-size: 40px;
+            margin-bottom: 20px;
+        }
+        
+        .loading-text {
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .loading-dots::after {
+            content: "";
+            animation: dots 1.5s steps(5, end) infinite;
+        }
+        
+        @keyframes dots {
+            0%, 20% { content: "."; }
+            40% { content: ".."; }
+            60%, 100% { content: "..."; }
+        }
+        
+        /* Print styles */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            
+            .container {
+                box-shadow: none;
+                border-radius: 0;
+            }
+            
+            .button-group {
+                display: none;
+            }
+            
+            h1 {
+                color: black;
+                background: white;
+                padding: 20px 0;
+                border-bottom: 2px solid #2c7be5;
+            }
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .patient-info, .report-section {
+                padding: 15px;
+            }
+            
+            .patient-details-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            h1 {
+                font-size: 24px;
+                padding: 20px 15px;
+            }
+            
+            h2 {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen">
+        <div class="loading-content">
+            <div class="spinner"></div>
+            <div class="loading-emoji">⚕️📋🔍</div>
+            <h2>Generating Your Health Report</h2>
+            <p class="loading-text">Our AI doctor is analyzing your data and preparing personalized recommendations<span class="loading-dots"></span></p>
+            <p class="loading-text">This may take a few moments</p>
+        </div>
+    </div>
+
+    <!-- Report Content (initially hidden) -->
+    <div class="container" style="display: none;">
+        <h1>Comprehensive Health Risk Report</h1>
+        
+        <div class="patient-info">
+            <h2>Patient Information</h2>
+            <div class="patient-details-grid" id="patientDetails">
+                <!-- Patient details will be inserted here by JavaScript -->
+            </div>
+        </div>
+        
+        <div class="report-section">
+            <h2>Risk Assessment Summary</h2>
+            <div id="riskSummary">
+                <!-- Risk summary will be inserted here by JavaScript -->
+            </div>
+        </div>
+        
+        <div class="report-section">
+            <h2>Detailed Recommendations</h2>
+            <div id="detailedRecommendations">
+                <!-- Recommendations will be inserted here by JavaScript -->
+            </div>
+        </div>
+        
+        <div class="report-section">
+            <h2>Prevention Plan</h2>
+            <div id="preventionPlan">
+                <!-- Prevention plan will be inserted here by JavaScript -->
+            </div>
+        </div>
+        
+        <div class="report-section">
+            <h2>Treatment Options</h2>
+            <div id="treatmentOptions">
+                <!-- Treatment options will be inserted here by JavaScript -->
+            </div>
+        </div>
+        
+        <div class="report-section">
+            <h2>Lifestyle Modifications</h2>
+            <div id="lifestyleModifications">
+                <!-- Lifestyle modifications will be inserted here by JavaScript -->
+            </div>
+        </div>
+        
+        <div class="report-section">
+            <h2>Monitoring Plan</h2>
+            <div id="monitoringPlan">
+                <!-- Monitoring plan will be inserted here by JavaScript -->
+            </div>
+        </div>
+        
+        <div class="button-group">
+            <button id="printReport" class="print-btn">Print Report</button>
+            <button id="backToForm" class="secondary-btn">Back to Form</button>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get report data from session
+            fetch('/get-report-data')
+                .then(response => response.json())
+                .then(data => {
+                    // Display patient information
+                    displayPatientInfo(data.formData);
+                    
+                    // Display risk summary
+                    displayRiskSummary(data.predictionData);
+                    
+                    // Generate the comprehensive report via LLM
+                    generateComprehensiveReport(data);
+                })
+                .catch(error => {
+                    console.error('Error fetching report data:', error);
+                    document.getElementById('loadingScreen').innerHTML = `
+                        <div class="loading-content">
+                            <div class="loading-emoji">⚠️❌</div>
+                            <h2>Error Loading Report</h2>
+                            <p class="loading-text">There was a problem generating your health report.</p>
+                            <button onclick="window.location.href='/'" style="margin-top: 20px; padding: 10px 20px; background: white; color: #2c7be5; border: none; border-radius: 5px; cursor: pointer;">Return to Form</button>
+                        </div>
+                    `;
+                });
+            
+            // Set up event listeners for buttons
+            document.getElementById('printReport').addEventListener('click', function() {
+                window.print();
+            });
+            
+            document.getElementById('backToForm').addEventListener('click', function() {
+                window.location.href = '/';
+            });
+            
+            // Function to display patient information
+            function displayPatientInfo(patientData) {
+                const patientDetails = document.getElementById('patientDetails');
+                let html = '';
+                
+                for (const [key, value] of Object.entries(patientData)) {
+                    const formattedKey = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                    html += `
+                        <div class="detail-item">
+                            <strong>${formattedKey}:</strong> ${value}
+                        </div>
+                    `;
+                }
+                
+                patientDetails.innerHTML = html;
+            }
+            
+            // Function to display risk summary
+            function displayRiskSummary(predictionData) {
+                const riskSummary = document.getElementById('riskSummary');
+                let html = '';
+                
+                for (const [disease, prediction] of Object.entries(predictionData)) {
+                    const formattedDisease = disease.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                    const riskLevel = prediction.risk_level.toLowerCase();
+                    const probability = (prediction.probability * 100).toFixed(1);
+                    
+                    let riskClass = 'risk-low';
+                    if (riskLevel.includes('high')) riskClass = 'risk-high';
+                    else if (riskLevel.includes('medium') || riskLevel.includes('moderate')) riskClass = 'risk-medium';
+                    
+                    html += `
+                        <div class="risk-item ${riskClass}">
+                            <div>${formattedDisease}</div>
+                            <div class="risk-percentage">${probability}% ${prediction.risk_level} risk</div>
+                        </div>
+                    `;
+                }
+                
+                riskSummary.innerHTML = html;
+            }
+            
+            // Function to generate comprehensive report
+            function generateComprehensiveReport(data) {
+                fetch('/generate-report', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                })
+                .then(response => response.json())
+                .then(reportData => {
+                    // Hide loading screen
+                    document.getElementById('loadingScreen').style.opacity = '0';
+                    setTimeout(() => {
+                        document.getElementById('loadingScreen').style.display = 'none';
+                        
+                        // Show report content
+                        document.querySelector('.container').style.display = 'block';
+                        
+                        // Populate report sections
+                        populateReportSections(reportData);
+                    }, 500);
+                })
+                .catch(error => {
+                    console.error('Error generating report:', error);
+                    document.getElementById('loadingScreen').innerHTML = `
+                        <div class="loading-content">
+                            <div class="loading-emoji">⚠️❌</div>
+                            <h2>Report Generation Failed</h2>
+                            <p class="loading-text">The AI doctor is currently unavailable. Please try again later.</p>
+                            <button onclick="window.location.href='/'" style="margin-top: 20px; padding: 10px 20px; background: white; color: #2c7be5; border: none; border-radius: 5px; cursor: pointer;">Return to Form</button>
+                        </div>
+                    `;
+                });
+            }
+            
+            // Function to populate report sections with LLM-generated content
+            function populateReportSections(reportData) {
+                // Function to format text with paragraphs
+                const formatText = (text) => {
+                    if (!text) return '<p>No information available.</p>';
+                    
+                    // Split by new lines and create paragraphs
+                    return text.split('\n')
+                        .filter(line => line.trim().length > 0)
+                        .map(line => `<p>${line}</p>`)
+                        .join('');
+                };
+                
+                // Populate each section
+                document.getElementById('detailedRecommendations').innerHTML = formatText(reportData.detailed_recommendations);
+                document.getElementById('preventionPlan').innerHTML = formatText(reportData.prevention_plan);
+                document.getElementById('treatmentOptions').innerHTML = formatText(reportData.treatment_options);
+                document.getElementById('lifestyleModifications').innerHTML = formatText(reportData.lifestyle_modifications);
+                document.getElementById('monitoringPlan').innerHTML = formatText(reportData.monitoring_plan);
+                
+                // If we have a risk summary from the LLM, use it
+                if (reportData.risk_summary) {
+                    document.getElementById('riskSummary').innerHTML += formatText(reportData.risk_summary);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
